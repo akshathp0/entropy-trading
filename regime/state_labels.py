@@ -27,4 +27,3 @@ def label_regime(df, threshold = REGIME_THRESHOLD, window = TSTAT_FEATURE_WINDOW
     df['Regime'] = np.select(thresholds, labels, default = 0)
 
     return df
-
