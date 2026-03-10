@@ -41,6 +41,4 @@ def build_expanding_entropy(df, start = EXPANDING_WINDOW_MINIMUM, count_min = ST
             else:
                 df['Expanding Entropy'].iat[i] = vector.loc[state]
 
-    print("new func")
-
     return df

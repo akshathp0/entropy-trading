@@ -23,3 +23,9 @@ state_count_minimum: 30
 entropy_confidence: 1
 tstat_exposure_window: 20
 c: 2
+
+# mean reversion params
+zscore_window: 20
+
+# momentum params
+momentum_window: 60
