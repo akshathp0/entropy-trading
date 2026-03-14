@@ -27,3 +27,12 @@ def label_regime(df, threshold = REGIME_THRESHOLD, window = TSTAT_FEATURE_WINDOW
     df['Regime'] = np.select(thresholds, labels, default = 0)
 
     return df
+
+def smooth_regime(df, window=SMOOTHER):
+    df['Regime'] = (
+        df['Regime']
+        .rolling(window = window, min_periods = window)
+        .apply(lambda x: x[-1] if (x == x[-1]).sum() >= window else np.nan)
+        .ffill()
+    )
+    return df

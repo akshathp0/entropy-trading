@@ -7,7 +7,7 @@ with open("config.yml", "r") as file:
 ZSCORE_WINDOW = config['zscore_window']
 
 def calculate_zscore(df, window = ZSCORE_WINDOW):
-    rolling_window = df['SPY'].rolling(window)
+    rolling_window = df['Log Return'].rolling(window)
     mean = rolling_window.mean()
     std = rolling_window.std()
 

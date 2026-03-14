@@ -11,13 +11,13 @@ volatility_feature_window: 60
 
 # state labeling params
 vol_percentile: 70
-vol_window: 500
-regime_threshold: 1
+vol_window: 252
+regime_threshold: 1.5
 smoother: 5
 
 # markov chain params
 expanding_window_minimum: 500
-state_count_minimum: 30
+state_count_minimum: 15
 
 # exposure params
 entropy_confidence: 1

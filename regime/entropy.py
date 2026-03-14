@@ -21,7 +21,7 @@ def build_stationary_entropy(df, vector):
     return df
 
 def build_expanding_entropy(df, start = EXPANDING_WINDOW_MINIMUM, count_min = STATE_COUNT_MINIMUM):
-    df['Expanding Entropy'] = np.nan
+    expanding = [np.nan] * len(df)
 
     for i in range(start, len(df)):
         window_df = df.iloc[:i]
@@ -32,13 +32,15 @@ def build_expanding_entropy(df, start = EXPANDING_WINDOW_MINIMUM, count_min = ST
         fallback_entropy = vector.mean()
 
         if state not in vector.index:
-            df['Expanding Entropy'].iat[i] = fallback_entropy
+            expanding[i] = fallback_entropy
         else:
             state_count = counts.loc[state].sum()
 
             if state_count < count_min:
-                df['Expanding Entropy'].iat[i] = fallback_entropy
+                expanding[i] = fallback_entropy
             else:
-                df['Expanding Entropy'].iat[i] = vector.loc[state]
+                expanding[i] = vector.loc[state].item()
+
+        df['Expanding Entropy'] = expanding
 
     return df
