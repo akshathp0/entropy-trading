@@ -41,6 +41,6 @@ def build_expanding_entropy(df, start = EXPANDING_WINDOW_MINIMUM, count_min = ST
             else:
                 expanding[i] = vector.loc[state].item()
 
-        df['Expanding Entropy'] = expanding
+    df['Expanding Entropy'] = expanding
 
     return df
