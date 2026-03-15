@@ -1,6 +1,6 @@
 # spy data
 ticker: SPY
-start: 2015-01-01
+start: 2008-01-01
 end: 2025-01-01
 
 # t-stat params
@@ -12,7 +12,7 @@ volatility_feature_window: 60
 # state labeling params
 vol_percentile: 70
 vol_window: 252
-regime_threshold: 1.5
+regime_threshold: 0.8
 smoother: 5
 
 # markov chain params
