@@ -14,6 +14,7 @@ def generate_signal(df):
     return df
 
 def blended_backtest(df):
+
     df['Blend Return'] = df['Blend Signal'] * df['Pct Return']
     df['Blend Return'] = df['Blend Return'].fillna(0)
 
