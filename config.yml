@@ -29,3 +29,7 @@ zscore_window: 20
 
 # momentum params
 momentum_window: 60
+momentum_scaler: 0.05
+
+# metrics params
+risk_free_rate: 0

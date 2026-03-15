@@ -11,6 +11,6 @@ def calculate_zscore(df, window = ZSCORE_WINDOW):
     mean = rolling_window.mean()
     std = rolling_window.std()
 
-    df['Z-Score'] = ((df['SPY'] - mean) / std).shift(1)
+    df['Z-Score'] = ((df['Log Return'] - mean) / std).shift(1)
 
     return df
