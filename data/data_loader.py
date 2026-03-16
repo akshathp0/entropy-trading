@@ -11,9 +11,10 @@ END = config['end']
 
 def get_data(ticker = TICKER, start = START, end = END):
 
-    spy = yf.download(ticker, start = start, end = end, auto_adjust = False)['Adj Close']
+    df = yf.download(ticker, start = start, end = end, auto_adjust = False)['Adj Close']
+    df.columns = ['Price']
 
-    spy['Log Return'] = np.log(spy / spy.shift(1))
-    spy.dropna(inplace = True)
+    df['Log Return'] = np.log(df / df.shift(1))
+    df.dropna(inplace = True)
 
-    return spy
+    return df
