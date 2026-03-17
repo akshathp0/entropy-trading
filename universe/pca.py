@@ -20,6 +20,6 @@ def fit_pca(returns, tickers):
     return df, pca
 
 def significant_components(p_comp, variance_threshold = VARIANCE_THRESHOLD):
-    for i, total in enumerate(p_comp.explained_variance_ratio_.cumsum()):
-        if total >= variance_threshold:
+    for i in range(len(p_comp.explained_variance_ratio_)):
+        if p_comp.explained_variance_ratio_.cumsum()[i] >= variance_threshold:
             return i + 1
