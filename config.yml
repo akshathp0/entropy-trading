@@ -33,3 +33,6 @@ momentum_scaler: 0.05
 
 # metrics params
 risk_free_rate: 0
+
+# pca params
+variance_threshold: 0.8

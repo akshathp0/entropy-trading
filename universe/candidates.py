@@ -13,11 +13,11 @@ def load_data(start = START, end = END):
                'TLT', 'IEF', 'HYG', 'LQD',
                'GLD', 'USO', 'DBC',
                'VNQ',
-               'AGG'
+               'AGG',
                'XLI', 'XLB', 'XLP', 'XLY',
                'XLF', 'XLE', 'XLK', 'XLV', 'XLU']
     
-    df = yf.download(tickers, start = start, end = end)['Adj Close']
+    df = yf.download(tickers, start = start, end = end, auto_adjust = False)['Adj Close']
     returns = df.pct_change().dropna()
 
-    return df
+    return returns, tickers
