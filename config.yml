@@ -37,3 +37,6 @@ risk_free_rate: 0
 # pca params
 variance_threshold: 0.8
 corr_threshold: 0.8
+
+# plotting params
+rolling_sharpe_window: 252
