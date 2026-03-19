@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 from evaluation import metrics
+from data import data_loader
 import yaml
 
 with open("config.yml", "r") as file:
@@ -27,9 +28,15 @@ def plot_pca_bars(loadings, n_components):
 
     return fig
 
-def plot_equity_curve(df, ticker):
+def plot_equity_curve(df, ticker, spy_curve):
+    spy_aligned = spy_curve.reindex(df.index)
+
     fig, ax = plt.subplots(figsize = (10, 5))
-    sns.lineplot(data = df[['Blend Equity Curve', 'SPY Return Curve']])
+    plot_df = pd.DataFrame({
+        'Blend Equity Curve': df['Blend Equity Curve'],
+        'SPY Return Curve': spy_aligned
+    })  
+    sns.lineplot(data = plot_df)
     ax.set_title(f'{ticker} Equity Curve vs. SPY')
     plt.tight_layout()
 
@@ -53,11 +60,18 @@ def plot_expanding_entropy(df, ticker):
 
     return fig
 
-def plot_rolling_sharpe(df, ticker, window = ROLLING_SHARPE_WINDOW):
+def plot_rolling_sharpe(df, ticker, spy_curve, window = ROLLING_SHARPE_WINDOW):
+    spy_aligned = spy_curve.reindex(df.index)
+
     fig, ax = plt.subplots(figsize = (10, 5))
     df['Blend Rolling Sharpe'] = df['Blend Return'].rolling(window).apply(lambda x: metrics.calculate_sharpe(pd.Series(x)))
-    df['SPY Rolling Sharpe'] = df['Pct Return'].rolling(window).apply(lambda x: metrics.calculate_sharpe(pd.Series(x)))
-    sns.lineplot(data = df[['Blend Rolling Sharpe', 'SPY Rolling Sharpe']])
+    spy_rolling_sharpe = spy_aligned.rolling(window).apply(lambda x: metrics.calculate_sharpe(pd.Series(x)))
+    
+    plot_df = pd.DataFrame({
+        'Blend Rolling Sharpe': df['Blend Rolling Sharpe'],
+        'SPY Rolling Sharpe': spy_rolling_sharpe
+    })  
+    sns.lineplot(data = plot_df)
     ax.set_title(f'{ticker} Rolling Sharpe (252 Days) vs. SPY')
     plt.tight_layout()
 

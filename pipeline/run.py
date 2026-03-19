@@ -28,9 +28,9 @@ def run_pipeline(ticker):
 def calculate_metrics(df, ticker):
     annualized_returns = metrics.calculate_annualized_returns(df['Blend Return'])
     sharpe = metrics.calculate_sharpe(df['Blend Return'])
-    sortino = metrics.calculate_sharpe(df['Blend Return'])
+    sortino = metrics.calculate_sortino(df['Blend Return'])
     calmar = metrics.calculate_calmar(df['Blend Return'])
-    max_drawdown = metrics.calculate_sharpe(df['Blend Return'])
+    max_drawdown = metrics.calculate_max_drawdown(df['Blend Return'])
     state_counts = metrics.state_counts(df)
     entropy_stats = metrics.describe_entropy(df)
     asset = ticker.lower()
@@ -46,10 +46,15 @@ def calculate_metrics(df, ticker):
     entropy_stats.to_csv(f'results/{asset}/entropy_stats.csv', index = False)
 
 def generate_plots(df, ticker):
+    spy_df = data_loader.get_data('SPY')
+    spy_df['Pct Return'] = spy_df['Price'].pct_change()
+    spy_curve = (1 + spy_df['Pct Return']).cumprod()
+    spy_curve.name = 'SPY Return Curve'
+
     asset = ticker.lower()
     os.makedirs(f'results/{asset}', exist_ok = True)
 
-    equity_curve = plot.plot_equity_curve(df, ticker)
+    equity_curve = plot.plot_equity_curve(df, ticker, spy_curve)
     equity_curve.savefig(f'results/{asset}/equity_curve.png')
 
     regime_overlay = plot.plot_regime_overlay(df, ticker)
@@ -58,7 +63,7 @@ def generate_plots(df, ticker):
     expanding_entropy = plot.plot_expanding_entropy(df, ticker)
     expanding_entropy.savefig(f'results/{asset}/expanding_entropy.png')
 
-    rolling_sharpe = plot.plot_rolling_sharpe(df, ticker)
+    rolling_sharpe = plot.plot_rolling_sharpe(df, ticker, spy_curve)
     rolling_sharpe.savefig(f'results/{asset}/rolling_sharpe')
 
 def analyze_ticker(df, ticker):
