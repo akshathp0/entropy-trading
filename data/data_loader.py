@@ -17,4 +17,6 @@ def get_data(ticker = TICKER, start = START, end = END):
     df['Log Return'] = np.log(df / df.shift(1))
     df.dropna(inplace = True)
 
+    df['Return'] = df['Price'].pct_change().dropna()
+
     return df

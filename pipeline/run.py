@@ -40,10 +40,10 @@ def calculate_metrics(df, ticker):
                   'Sortino': [sortino],
                   'Calmar': [calmar],
                   'Max Drawdown': [max_drawdown],
-                    }).to_csv(f'results/{asset}/metrics.csv', index = False)
+                    }).to_csv(f'results/assets/{asset}/metrics.csv', index = False)
     
-    state_counts.to_csv(f'results/{asset}/state_counts.csv', index = False)
-    entropy_stats.to_csv(f'results/{asset}/entropy_stats.csv', index = False)
+    state_counts.to_csv(f'results/assets/{asset}/state_counts.csv', index = False)
+    entropy_stats.to_csv(f'results/assets/{asset}/entropy_stats.csv', index = False)
 
 def generate_plots(df, ticker):
     spy_df = data_loader.get_data('SPY')
@@ -52,19 +52,19 @@ def generate_plots(df, ticker):
     spy_curve.name = 'SPY Return Curve'
 
     asset = ticker.lower()
-    os.makedirs(f'results/{asset}', exist_ok = True)
+    os.makedirs(f'results/assets/{asset}', exist_ok = True)
 
     equity_curve = plot.plot_equity_curve(df, ticker, spy_curve)
-    equity_curve.savefig(f'results/{asset}/equity_curve.png')
+    equity_curve.savefig(f'results/assets/{asset}/equity_curve.png')
 
     regime_overlay = plot.plot_regime_overlay(df, ticker)
-    regime_overlay.savefig(f'results/{asset}/regime_overlay.png')
+    regime_overlay.savefig(f'results/assets/{asset}/regime_overlay.png')
 
     expanding_entropy = plot.plot_expanding_entropy(df, ticker)
-    expanding_entropy.savefig(f'results/{asset}/expanding_entropy.png')
+    expanding_entropy.savefig(f'results/assets/{asset}/expanding_entropy.png')
 
-    rolling_sharpe = plot.plot_rolling_sharpe(df, ticker, spy_curve)
-    rolling_sharpe.savefig(f'results/{asset}/rolling_sharpe')
+    # rolling_sharpe = plot.plot_rolling_sharpe(df, ticker, spy_curve)
+    # rolling_sharpe.savefig(f'results/assets/{asset}/rolling_sharpe')
 
 def analyze_ticker(df, ticker):
     generate_plots(df, ticker)

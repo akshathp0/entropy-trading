@@ -26,17 +26,24 @@ c: 2
 
 # mean reversion params
 zscore_window: 20
+long_short_threshold: 0.05
+tanh_scaler: 1
 
 # momentum params
-momentum_window: 60
+momentum_window: 252
 momentum_scaler: 0.05
 
 # metrics params
 risk_free_rate: 0
 
 # pca params
-variance_threshold: 0.8
-corr_threshold: 0.8
+variance_threshold: 0.9
+corr_threshold: 0.85
 
 # plotting params
 rolling_sharpe_window: 252
+
+# candidates params:
+annualized_threshold: 0.05
+annualized_start: 2010-01-01
+annualized_end: 2018-01-01

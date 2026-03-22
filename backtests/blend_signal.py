@@ -9,7 +9,7 @@ def generate_signal(df):
 
     df['Blend Signal'] = (df['Confidence'] * 
                           df['w_mom'] * df['Momentum Signal'] +
-                          df['w_mr'] * df['MR Signal']).clip(0, 1)
+                          df['w_mr'] * df['MR Signal']).clip(-1, 1)
 
     return df
 

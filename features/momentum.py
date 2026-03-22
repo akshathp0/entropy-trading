@@ -8,5 +8,6 @@ MOMENTUM_WINDOW = config['momentum_window']
 
 def calculate_momentum(df, window = MOMENTUM_WINDOW):
     df['Momentum'] = df['Log Return'].rolling(window).sum().shift(1)
+    print(window)
 
     return df

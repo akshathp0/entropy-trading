@@ -14,6 +14,7 @@ def correlation_check(top_pcas, matrix, loadings):
 
     while(len(flagged_pairs) != 0):
         for ticker1, ticker2 in flagged_pairs:
+            print(f'checking: {ticker1} and {ticker2}')
             idx1 = loadings.loc[ticker1].abs().idxmax()
             idx2 = loadings.loc[ticker2].abs().idxmax()
             if (loadings[idx1].loc[ticker1] > loadings[idx2].loc[ticker2]):
