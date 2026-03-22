@@ -13,21 +13,8 @@ def sigmoid(x):
 
     return s
 
-def generate_long_short_signal(df, scaler = TANH_SCALER):
-    df['MR Signal'] = np.tanh(-df['Z-Score'] / scaler).clip(-1, 1)
-
-    return df
-
-def generate_long_signal(df):
+def generate_signal(df):
     df['MR Signal'] = sigmoid(-df['Z-Score']).clip(0, 1)
-
-    return df
-
-def generate_signal(df, threshold = LONG_SHORT_THRESHOLD):
-    if (metrics.calculate_annualized_returns(df['Return']) < threshold):
-        df = generate_long_short_signal(df)
-    else:
-        df = generate_long_signal(df)
 
     return df
 

@@ -4,6 +4,7 @@ from features import momentum, tstat, volatility, zscore
 from regime import entropy, matrix, state_labels
 from evaluation import metrics, plot
 import pandas as pd
+import matplotlib.pyplot as plt
 import os
 
 def run_pipeline(ticker):
@@ -65,6 +66,8 @@ def generate_plots(df, ticker):
 
     # rolling_sharpe = plot.plot_rolling_sharpe(df, ticker, spy_curve)
     # rolling_sharpe.savefig(f'results/assets/{asset}/rolling_sharpe')
+
+    plt.close("all")
 
 def analyze_ticker(df, ticker):
     generate_plots(df, ticker)

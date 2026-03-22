@@ -1,7 +1,9 @@
 # spy data
 ticker: SPY
+
+# in-sample dates
 start: 2008-01-01
-end: 2025-01-01
+end: 2018-01-01
 
 # t-stat params
 tstat_feature_window: 200
@@ -45,5 +47,5 @@ rolling_sharpe_window: 252
 
 # candidates params:
 annualized_threshold: 0.05
-annualized_start: 2010-01-01
-annualized_end: 2018-01-01
+annualized_start: 2006-01-01
+annualized_end: 2008-01-01
