@@ -30,12 +30,18 @@ def top_pcas(loadings, n_components):
     top_pcas = []
 
     for i in range(n_components):
-        n = 1
-        top_pca = loadings[f'PC{i + 1}'].abs().idxmax()
-        while(top_pca in top_pcas):
-            top_pca = loadings[f'PC{i + 1}'].abs().nlargest(n).index[-1]
-            n += 1
+        col = loadings[f'PC{i + 1}']
 
-        top_pcas.append(top_pca)
+        ranked_pcas = col[col > 0].sort_values(ascending = False)
+        for ticker in ranked_pcas.index:
+            if ticker not in top_pcas:
+                top_pcas.append(ticker)
+                break
+
+        ranked_pcas = col[col > 0].sort_values(ascending = False)
+        for ticker in ranked_pcas.index:
+            if ticker not in top_pcas:
+                top_pcas.append(ticker)
+                break
 
     return top_pcas

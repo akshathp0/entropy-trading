@@ -11,7 +11,7 @@ TSTAT_EXPOSURE_WINDOW = config['tstat_exposure_window']
 C = config['c']
 
 def normalize_entropy(df, gamma = ENTROPY_CONFIDENCE):
-    df['Confidence'] = 1 - (df['Rolling Entropy'] / np.log(6))
+    df['Confidence'] = 1 - (df['Rolling Entropy'] / np.log(4))
     df['Confidence'] = df['Confidence'].clip(0, 1)
     df['Confidence'] = df['Confidence'] ** gamma
     df['Confidence'] = df['Confidence'].clip(0, 1)

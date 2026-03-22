@@ -47,6 +47,7 @@ corr_threshold: 0.85
 rolling_sharpe_window: 252
 
 # candidates params:
+sharpe_threshold: 0.7
 annualized_threshold: 0.05
 annualized_start: 2006-01-01
 annualized_end: 2008-01-01

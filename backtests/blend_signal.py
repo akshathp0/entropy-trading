@@ -1,5 +1,6 @@
 def generate_signal(df):
-    df['Blend Signal'] = (df['Confidence'] * df['MR Signal']).clip(0, 1)
+    target_vol = df['Volatility'].expanding().mean()
+    df['Blend Signal'] = (df['Confidence'] * df['MR Signal'] * (target_vol / df['Volatility'])).clip(0, 1)
 
     return df
 

@@ -45,10 +45,7 @@ def calculate_metrics(df, ticker):
     entropy_stats.to_csv(f'results/assets/{asset}/entropy_stats.csv', index = False)
 
 def generate_plots(df, ticker):
-    spy_df = data_loader.get_data('SPY')
-    spy_df['Pct Return'] = spy_df['Price'].pct_change()
-    spy_curve = (1 + spy_df['Pct Return']).cumprod()
-    spy_curve.name = 'SPY Return Curve'
+    spy_curve = load_spy()
 
     asset = ticker.lower()
     os.makedirs(f'results/assets/{asset}', exist_ok = True)
@@ -67,6 +64,44 @@ def generate_plots(df, ticker):
 
     plt.close("all")
 
+def generate_portfolio(df, ticker):
+    spy_curve = load_spy()
+
+    asset = ticker.lower()
+    os.makedirs(f'results/assets/{asset}', exist_ok = True)
+
+    equity_curve = plot.plot_equity_curve(df, ticker, spy_curve)
+    equity_curve.savefig(f'results/assets/{asset}/equity_curve.png')
+
+    plt.close("all")
+
+def calculate_portfolio(df, ticker):
+    annualized_returns = metrics.calculate_annualized_returns(df['Blend Return'])
+    sharpe = metrics.calculate_sharpe(df['Blend Return'])
+    sortino = metrics.calculate_sortino(df['Blend Return'])
+    calmar = metrics.calculate_calmar(df['Blend Return'])
+    max_drawdown = metrics.calculate_max_drawdown(df['Blend Return'])
+    asset = ticker.lower()
+
+    pd.DataFrame({'Annualized Returns': [annualized_returns],
+                  'Sharpe': [sharpe],
+                  'Sortino': [sortino],
+                  'Calmar': [calmar],
+                  'Max Drawdown': [max_drawdown],
+                    }).to_csv(f'results/assets/{asset}/metrics.csv', index = False)
+    
 def analyze_ticker(df, ticker):
-    generate_plots(df, ticker)
-    calculate_metrics(df, ticker)
+    if (ticker == 'Portfolio'):
+        generate_portfolio(df, ticker)
+        calculate_portfolio(df, ticker)
+    else:
+        generate_plots(df, ticker)
+        calculate_metrics(df, ticker)
+   
+def load_spy():
+    spy_df = data_loader.get_data('SPY')
+    spy_df['Pct Return'] = spy_df['Price'].pct_change()
+    spy_curve = (1 + spy_df['Pct Return']).cumprod()
+    spy_curve.name = 'SPY Return Curve'
+
+    return spy_curve

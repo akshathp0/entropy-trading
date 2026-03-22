@@ -1,6 +1,7 @@
 import yfinance as yf
 import pandas as pd
 from evaluation import metrics
+from pipeline import run
 import yaml
 
 with open("config.yml", "r") as file:
@@ -8,12 +9,12 @@ with open("config.yml", "r") as file:
 
 START = config['start']
 END = config['end']
+SHARPE_THRESHOLD = config['sharpe_threshold']
 ANNUALIZED_THRESHOLD = config['annualized_threshold']
 ANNUALIZED_START = config['annualized_start']
 ANNUALIZED_END = config['annualized_end']
 
 def load_data(start = START, end = END):
-    
     tickers = ['QQQ', 
                'IWM', 'IJH', 
                'VUG', 'VTV', 
@@ -40,10 +41,35 @@ def filter_annualized(start = ANNUALIZED_START, end = ANNUALIZED_END, threshold 
     return returns[filtered_tickers], filtered_tickers
 
 def final_asset_drift(start = START, end = END):
-    
     tickers = pd.read_csv('results/universe_selection/final_assets.csv', skiprows = 1, header = None)[0].tolist()
 
     df = yf.download(tickers, start = start, end = end, auto_adjust = False)['Adj Close']
     returns = df.pct_change().dropna()
 
     return returns, tickers
+
+def filter_asset_sharpes(returns, tickers):
+    sharpes = pd.DataFrame(columns = ['Ticker', 'Sharpe Ratio'])
+
+    for ticker in tickers:
+        sharpes.loc[len(sharpes)] = {'Ticker': ticker,
+                                'Sharpe Ratio': metrics.calculate_sharpe(returns[ticker])}
+
+    return sharpes
+
+def filter_strat_sharpes(tickers):
+    sharpes = pd.DataFrame(columns = ['Ticker', 'Sharpe Ratio'])
+    results = {}
+
+    for ticker in tickers:
+        df = run.run_pipeline(ticker)
+        sharpes.loc[len(sharpes)] = {'Ticker': ticker,
+                                'Sharpe Ratio': metrics.calculate_sharpe(df['Blend Return'])}
+        results[ticker] = df
+
+    return sharpes, results
+
+def apply_sharpe_threshold(sharpes, threshold = SHARPE_THRESHOLD):
+    sharpes = sharpes[sharpes['Sharpe Ratio'] >= threshold]
+
+    return sharpes['Ticker']
