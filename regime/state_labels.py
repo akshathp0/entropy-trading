@@ -18,13 +18,13 @@ def label_volatility(df, percentile = VOL_PERCENTILE, window = VOL_WINDOW):
 
 def label_regime(df, threshold = REGIME_THRESHOLD, window = TSTAT_FEATURE_WINDOW):
     thresholds = [
-        (df[f'T-Stat_{window}'] >= threshold),
-        (df[f'T-Stat_{window}'] <= -threshold)
+        (df[f'T-Stat_{window}'] >= 0),
+        (df[f'T-Stat_{window}'] < 0)
     ]
 
     labels = [1, -1]
     
-    df['Regime'] = np.select(thresholds, labels, default = 0)
+    df['Regime'] = np.select(thresholds, labels)
 
     return df
 

@@ -20,6 +20,7 @@ smoother: 5
 # markov chain params
 expanding_window_minimum: 500
 state_count_minimum: 15
+rolling_window: 500
 
 # exposure params
 entropy_confidence: 1

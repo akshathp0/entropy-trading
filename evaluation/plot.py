@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 from evaluation import metrics
-from data import data_loader
 import yaml
 
 with open("config.yml", "r") as file:
@@ -52,10 +51,10 @@ def plot_regime_overlay(df, ticker):
 
     return fig
 
-def plot_expanding_entropy(df, ticker):
+def plot_rolling_entropy(df, ticker):
     fig, ax = plt.subplots(figsize = (10, 5))
-    sns.lineplot(data = df['Expanding Entropy'])
-    ax.set_title(f'{ticker} Expanding Entropy Over Time')
+    sns.lineplot(data = df['Rolling Entropy'])
+    ax.set_title(f'{ticker} Rolling Entropy Over Time')
     plt.tight_layout()
 
     return fig

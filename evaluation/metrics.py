@@ -51,4 +51,4 @@ def state_counts(df):
     return df['State'].value_counts()
 
 def describe_entropy(df):
-    return df['Expanding Entropy'].describe()
+    return df['Rolling Entropy'].describe()

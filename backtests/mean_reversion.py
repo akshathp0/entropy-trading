@@ -13,7 +13,16 @@ def sigmoid(x):
 
     return s
 
-def generate_signal(df):
+def generate_signal(df, scaler = TANH_SCALER):
+    # bull = df['State'].isin(['1_0', '1_1'])
+
+    # bull_signal = sigmoid(-df['Z-Score']).clip(0, 1)
+    # bear_signal = np.tanh(-df['Z-Score'] / scaler).clip(-1, 1)
+
+    # df['MR Signal'] = np.where(bull, bull_signal, bear_signal)
+
+    # return df
+
     df['MR Signal'] = sigmoid(-df['Z-Score']).clip(0, 1)
 
     return df
