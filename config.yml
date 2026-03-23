@@ -26,6 +26,7 @@ rolling_window: 500
 entropy_confidence: 1
 tstat_exposure_window: 20
 c: 2
+entropy_mode: 'signal_only'
 
 # mean reversion params
 zscore_window: 20
@@ -51,3 +52,8 @@ sharpe_threshold: 0.7
 annualized_threshold: 0.05
 annualized_start: 2006-01-01
 annualized_end: 2008-01-01
+
+# grid_search params:
+alt_gammas: [0.5, 0.8, 1.0, 1.2, 1.4, 2.0]
+alt_entropy_modes: ['signal_only', 'portfolio_only', 'both']
+alt_entropy_windows: [250, 500, 750]

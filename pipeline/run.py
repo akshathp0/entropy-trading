@@ -1,4 +1,4 @@
-from backtests import blend_signal, mean_reversion, momentum_backtest, exposure
+from backtests import blend_signal, mean_reversion, exposure
 from data import data_loader
 from features import tstat, volatility, zscore
 from regime import entropy, matrix, state_labels
@@ -30,8 +30,8 @@ def calculate_metrics(df, ticker):
     sortino = metrics.calculate_sortino(df['Blend Return'])
     calmar = metrics.calculate_calmar(df['Blend Return'])
     max_drawdown = metrics.calculate_max_drawdown(df['Blend Return'])
-    state_counts = metrics.state_counts(df)
-    entropy_stats = metrics.describe_entropy(df)
+    # state_counts = metrics.state_counts(df)
+    # entropy_stats = metrics.describe_entropy(df)
     asset = ticker.lower()
 
     pd.DataFrame({'Annualized Returns': [annualized_returns],
@@ -41,8 +41,8 @@ def calculate_metrics(df, ticker):
                   'Max Drawdown': [max_drawdown],
                     }).to_csv(f'results/assets/{asset}/metrics.csv', index = False)
     
-    state_counts.to_csv(f'results/assets/{asset}/state_counts.csv', index = False)
-    entropy_stats.to_csv(f'results/assets/{asset}/entropy_stats.csv', index = False)
+    # state_counts.to_csv(f'results/assets/{asset}/state_counts.csv', index = False)
+    # entropy_stats.to_csv(f'results/assets/{asset}/entropy_stats.csv', index = False)
 
 def generate_plots(df, ticker):
     spy_curve = load_spy()
@@ -67,36 +67,34 @@ def generate_plots(df, ticker):
 def generate_portfolio(df, ticker):
     spy_curve = load_spy()
 
-    asset = ticker.lower()
-    os.makedirs(f'results/assets/{asset}', exist_ok = True)
+    os.makedirs(f'results/portfolio', exist_ok = True)
 
-    equity_curve = plot.plot_equity_curve(df, ticker, spy_curve)
-    equity_curve.savefig(f'results/assets/{asset}/equity_curve.png')
+    equity_curve = plot.plot_equity_curve(df, 'Portfolio', spy_curve)
+    equity_curve.savefig('results/assets/portfolio/equity_curve.png')
 
     plt.close("all")
 
-def calculate_portfolio(df, ticker):
+def calculate_portfolio(df):
     annualized_returns = metrics.calculate_annualized_returns(df['Blend Return'])
     sharpe = metrics.calculate_sharpe(df['Blend Return'])
     sortino = metrics.calculate_sortino(df['Blend Return'])
     calmar = metrics.calculate_calmar(df['Blend Return'])
     max_drawdown = metrics.calculate_max_drawdown(df['Blend Return'])
-    asset = ticker.lower()
 
     pd.DataFrame({'Annualized Returns': [annualized_returns],
                   'Sharpe': [sharpe],
                   'Sortino': [sortino],
                   'Calmar': [calmar],
                   'Max Drawdown': [max_drawdown],
-                    }).to_csv(f'results/assets/{asset}/metrics.csv', index = False)
+                    }).to_csv(f'results/portfolio/metrics.csv', index = False)
     
 def analyze_ticker(df, ticker):
-    if (ticker == 'Portfolio'):
-        generate_portfolio(df, ticker)
-        calculate_portfolio(df, ticker)
-    else:
-        generate_plots(df, ticker)
-        calculate_metrics(df, ticker)
+    generate_plots(df, ticker)
+    calculate_metrics(df, ticker)
+
+def analyze_portfolio(df):
+    generate_portfolio()
+    calculate_portfolio(df)
    
 def load_spy():
     spy_df = data_loader.get_data('SPY')

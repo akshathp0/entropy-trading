@@ -1,6 +1,17 @@
-def generate_signal(df):
+import yaml
+
+with open('config.yml', 'r') as file:
+    config = yaml.safe_load(file)
+
+ENTROPY_MODE = config['entropy_mode']
+
+def generate_signal(df, mode = ENTROPY_MODE):
     target_vol = df['Volatility'].expanding().mean()
-    df['Blend Signal'] = (df['Confidence'] * df['MR Signal'] * (target_vol / df['Volatility'])).clip(0, 1)
+    
+    if mode == 'signal_only' or 'both':
+        df['Blend Signal'] = (df['Confidence'] * df['MR Signal'] * (target_vol / df['Volatility'])).clip(0, 1)
+    else:
+        df['Blend Signal'] = (df['MR Signal'] * (target_vol / df['Volatility'])).clip(0, 1)
 
     return df
 
