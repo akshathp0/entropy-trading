@@ -27,3 +27,12 @@ def iterate_pairs(tickers, gammas = ALT_GAMMAS, modes = ALT_ENTROPY_MODES, windo
         print(f'gamma: {gamma} mode: {mode} window: {window} sharpe: {sharpe}')
 
     return results
+
+def find_parameters(results):
+    best = results.loc[results['sharpe'].idxmax()]
+
+    gamma = best['gamma']
+    mode = best['mode']
+    window = best['window']
+
+    return gamma, mode, window

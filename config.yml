@@ -5,6 +5,14 @@ ticker: SPY
 start: 2008-01-01
 end: 2018-01-01
 
+# full backtest
+backtest_start: 2008-01-01
+backtest_end: 2026-01-01
+
+# out-of-sample dates
+start_eval: 2018-01-01
+end_eval: 2026-01-01
+
 # t-stat params
 tstat_feature_window: 200
 
@@ -20,13 +28,13 @@ smoother: 5
 # markov chain params
 expanding_window_minimum: 500
 state_count_minimum: 15
-rolling_window: 500
+rolling_window: 750
 
 # exposure params
-entropy_confidence: 1
+entropy_confidence: 2.0
 tstat_exposure_window: 20
 c: 2
-entropy_mode: 'signal_only'
+entropy_mode: 'portfolio_only'
 
 # mean reversion params
 zscore_window: 20

@@ -77,17 +77,17 @@ def generate_plots(df, ticker):
 
     plt.close("all")
 
-def generate_portfolio(df):
+def generate_portfolio(df, sample):
     spy_curve = load_spy()
 
-    os.makedirs(f'results/portfolio', exist_ok = True)
+    os.makedirs(f'results/{sample}_portfolio', exist_ok = True)
 
     equity_curve = plot.plot_equity_curve(df, 'Portfolio', spy_curve)
-    equity_curve.savefig('results/portfolio/equity_curve.png')
+    equity_curve.savefig(f'results/{sample}_portfolio/equity_curve.png')
 
     plt.close("all")
 
-def calculate_portfolio(df):
+def calculate_portfolio(df, sample):
     annualized_returns = metrics.calculate_annualized_returns(df['Blend Return'])
     sharpe = metrics.calculate_sharpe(df['Blend Return'])
     sortino = metrics.calculate_sortino(df['Blend Return'])
@@ -99,15 +99,15 @@ def calculate_portfolio(df):
                   'Sortino': [sortino],
                   'Calmar': [calmar],
                   'Max Drawdown': [max_drawdown],
-                    }).to_csv(f'results/portfolio/metrics.csv', index = False)
+                    }).to_csv(f'results/{sample}_portfolio/metrics.csv', index = False)
     
 def analyze_ticker(df, ticker):
     generate_plots(df, ticker)
     calculate_metrics(df, ticker)
 
-def analyze_portfolio(df):
-    generate_portfolio(df)
-    calculate_portfolio(df)
+def analyze_portfolio(df, sample):
+    generate_portfolio(df, sample)
+    calculate_portfolio(df, sample)
    
 def load_spy():
     spy_df = data_loader.get_data('SPY')
