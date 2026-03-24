@@ -8,8 +8,10 @@ with open('config.yml', 'r') as file:
 GAMMA = config['entropy_confidence']
 ENTROPY_MODE = config['entropy_mode']
 ENTROPY_WINDOW = config['rolling_window']
+INSAMPLE_START = config['start']
+INSAMPLE_END = config['end']
 
-def aggregate_results(tickers, gamma = None, mode = None, window = None):
+def aggregate_results(tickers, start = INSAMPLE_START, end = INSAMPLE_END, gamma = None, mode = None, window = None):
     
     gamma = gamma or GAMMA
     mode = mode or ENTROPY_MODE
@@ -18,7 +20,7 @@ def aggregate_results(tickers, gamma = None, mode = None, window = None):
     results = {}
 
     for ticker in tickers:
-        df = run.run_pipeline(ticker, gamma = gamma, mode = mode, window = window)
+        df = run.run_pipeline(ticker, start = start, end = end, gamma = gamma, mode = mode, window = window)
         results[ticker] = df
 
     return results

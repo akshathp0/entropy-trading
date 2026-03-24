@@ -14,8 +14,10 @@ with open('config.yml', 'r') as file:
 GAMMA = config['entropy_confidence']
 ENTROPY_MODE = config['entropy_mode']
 ENTROPY_WINDOW = config['rolling_window']
+INSAMPLE_START = config['start']
+INSAMPLE_END = config['end']
 
-def run_pipeline(ticker, gamma = None, mode = None, window = None):
+def run_pipeline(ticker, start = INSAMPLE_START, end = INSAMPLE_END, gamma = None, mode = None, window = None):
 
     gamma = gamma or GAMMA
     mode = mode or ENTROPY_MODE
@@ -77,8 +79,9 @@ def generate_plots(df, ticker):
 
     plt.close("all")
 
-def generate_portfolio(df, sample):
+def generate_portfolio(df, sample, start = INSAMPLE_START, end = INSAMPLE_END):
     spy_curve = load_spy()
+    df = df.iloc[start: end]
 
     os.makedirs(f'results/{sample}_portfolio', exist_ok = True)
 
@@ -87,7 +90,9 @@ def generate_portfolio(df, sample):
 
     plt.close("all")
 
-def calculate_portfolio(df, sample):
+def calculate_portfolio(df, sample, start = INSAMPLE_START, end = INSAMPLE_END):
+    df = df.iloc[start: end]
+
     annualized_returns = metrics.calculate_annualized_returns(df['Blend Return'])
     sharpe = metrics.calculate_sharpe(df['Blend Return'])
     sortino = metrics.calculate_sortino(df['Blend Return'])
@@ -105,9 +110,9 @@ def analyze_ticker(df, ticker):
     generate_plots(df, ticker)
     calculate_metrics(df, ticker)
 
-def analyze_portfolio(df, sample):
-    generate_portfolio(df, sample)
-    calculate_portfolio(df, sample)
+def analyze_portfolio(df, sample, start = INSAMPLE_START, end = INSAMPLE_END):
+    generate_portfolio(df, sample, start, end)
+    calculate_portfolio(df, sample, start, end)
    
 def load_spy():
     spy_df = data_loader.get_data('SPY')
