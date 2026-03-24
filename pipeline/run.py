@@ -60,7 +60,7 @@ def calculate_metrics(df, ticker):
     # entropy_stats.to_csv(f'results/assets/{asset}/entropy_stats.csv', index = False)
 
 def generate_plots(df, ticker):
-    spy_curve = load_spy()
+    spy_curve, _ = load_spy()
 
     asset = ticker.lower()
     os.makedirs(f'results/assets/{asset}', exist_ok = True)
@@ -80,12 +80,11 @@ def generate_plots(df, ticker):
     plt.close("all")
 
 def generate_portfolio(df, sample, start = INSAMPLE_START, end = INSAMPLE_END):
-    spy_curve = load_spy()
-    df = df.loc[start:end]
-    spy_curve = spy_curve.loc[start:end]
+    spy_curve, _ = load_spy(start = start, end = end)
+    df = df.loc[start:end].copy()
+    spy_curve = spy_curve.loc[start:end].copy()
 
-    df['Blend Equity Curve'] = df['Blend Equity Curve'] / df['Blend Equity Curve'].iloc[0]
-    spy_curve = spy_curve / spy_curve.iloc[0]
+    df['Blend Equity Curve'] = (1 + df['Blend Return']).cumprod()
 
     os.makedirs(f'results/{sample}_portfolio', exist_ok = True)
 
@@ -118,10 +117,26 @@ def analyze_portfolio(df, sample, start = INSAMPLE_START, end = INSAMPLE_END):
     generate_portfolio(df, sample, start, end)
     calculate_portfolio(df, sample, start, end)
    
-def load_spy():
-    spy_df = data_loader.get_data('SPY')
+def load_spy(start = INSAMPLE_START, end = INSAMPLE_END):
+    spy_df = data_loader.get_data('SPY', start = start, end = end)
     spy_df['Pct Return'] = spy_df['Price'].pct_change()
     spy_curve = (1 + spy_df['Pct Return']).cumprod()
     spy_curve.name = 'SPY Return Curve'
 
-    return spy_curve
+    return spy_curve, spy_df
+
+def calculate_spy(start = INSAMPLE_START, end = INSAMPLE_END):
+    _, df = load_spy(start = start, end = end)
+
+    annualized_returns = metrics.calculate_annualized_returns(df['Pct Return'])
+    sharpe = metrics.calculate_sharpe(df['Pct Return'])
+    sortino = metrics.calculate_sortino(df['Pct Return'])
+    calmar = metrics.calculate_calmar(df['Pct Return'])
+    max_drawdown = metrics.calculate_max_drawdown(df['Pct Return'])
+
+    pd.DataFrame({'Annualized Returns': [annualized_returns],
+                  'Sharpe': [sharpe],
+                  'Sortino': [sortino],
+                  'Calmar': [calmar],
+                  'Max Drawdown': [max_drawdown],
+                    }).to_csv(f'results/spy_metrics.csv', index = False)
