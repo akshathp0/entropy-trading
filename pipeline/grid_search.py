@@ -18,11 +18,11 @@ def set_parameters(tickers, gamma, mode, window):
     return portfolio_df
 
 def iterate_pairs(tickers, gammas = ALT_GAMMAS, modes = ALT_ENTROPY_MODES, windows = ALT_ENTROPY_WINDOWS):
-    results = pd.DataFrame()
+    results = pd.DataFrame(columns = ['gamma', 'mode', 'window', 'sharpe'])
 
     for gamma, mode, window in product(gammas, modes, windows):
-        portfolio = set_parameters(tickers, gamma, mode, window)
-        sharpe = metrics.calculate_sharpe(portfolio['Blend Return'])
+        portfolio_df = set_parameters(tickers, gamma, mode, window)
+        sharpe = metrics.calculate_sharpe(portfolio_df['Blend Return'])
         results.loc[len(results)] = {'gamma': gamma, 'mode': mode, 'window': window, 'sharpe': sharpe}
         print(f'gamma: {gamma} mode: {mode} window: {window} sharpe: {sharpe}')
 
