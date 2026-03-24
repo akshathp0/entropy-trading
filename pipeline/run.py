@@ -23,7 +23,7 @@ def run_pipeline(ticker, start = INSAMPLE_START, end = INSAMPLE_END, gamma = Non
     mode = mode or ENTROPY_MODE
     window = window or ENTROPY_WINDOW
 
-    df = data_loader.get_data(ticker)
+    df = data_loader.get_data(ticker, start = start, end = end)
     df = tstat.compute_tstat(df)
     df = zscore.calculate_zscore(df)
     df = volatility.compute_volatility(df)
@@ -81,7 +81,8 @@ def generate_plots(df, ticker):
 
 def generate_portfolio(df, sample, start = INSAMPLE_START, end = INSAMPLE_END):
     spy_curve = load_spy()
-    df = df.iloc[start: end]
+    df = df.loc[start:end]
+    spy_curve = spy_curve.loc[start:end]
 
     os.makedirs(f'results/{sample}_portfolio', exist_ok = True)
 
@@ -91,7 +92,7 @@ def generate_portfolio(df, sample, start = INSAMPLE_START, end = INSAMPLE_END):
     plt.close("all")
 
 def calculate_portfolio(df, sample, start = INSAMPLE_START, end = INSAMPLE_END):
-    df = df.iloc[start: end]
+    df = df.loc[start: end]
 
     annualized_returns = metrics.calculate_annualized_returns(df['Blend Return'])
     sharpe = metrics.calculate_sharpe(df['Blend Return'])
