@@ -84,6 +84,9 @@ def generate_portfolio(df, sample, start = INSAMPLE_START, end = INSAMPLE_END):
     df = df.loc[start:end]
     spy_curve = spy_curve.loc[start:end]
 
+    df['Blend Equity Curve'] = df['Blend Equity Curve'] / df['Blend Equity Curve'].iloc[0]
+    spy_curve = spy_curve / spy_curve.iloc[0]
+
     os.makedirs(f'results/{sample}_portfolio', exist_ok = True)
 
     equity_curve = plot.plot_equity_curve(df, 'Portfolio', spy_curve)
