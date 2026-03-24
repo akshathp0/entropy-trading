@@ -6,8 +6,21 @@ from evaluation import metrics, plot
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+import yaml
 
-def run_pipeline(ticker):
+with open('config.yml', 'r') as file:
+    config = yaml.safe_load(file)
+
+GAMMA = config['entropy_confidence']
+ENTROPY_MODE = config['entropy_mode']
+ENTROPY_WINDOW = config['rolling_window']
+
+def run_pipeline(ticker, gamma = None, mode = None, window = None):
+
+    gamma = gamma or GAMMA
+    mode = mode or ENTROPY_MODE
+    window = window or ENTROPY_WINDOW
+
     df = data_loader.get_data(ticker)
     df = tstat.compute_tstat(df)
     df = zscore.calculate_zscore(df)
@@ -16,10 +29,10 @@ def run_pipeline(ticker):
     df = state_labels.label_regime(df)
     df = state_labels.smooth_regime(df)
     df = matrix.initialize_state(df)
-    df = entropy.build_rolling_entropy(df)
-    df = exposure.normalize_entropy(df)
+    df = entropy.build_rolling_entropy(df, window = window)
+    df = exposure.normalize_entropy(df, gamma = gamma)
     df = mean_reversion.generate_signal(df)
-    df = blend_signal.generate_signal(df)
+    df = blend_signal.generate_signal(df, mode = mode)
     df = blend_signal.blended_backtest(df)
 
     return df
@@ -64,13 +77,13 @@ def generate_plots(df, ticker):
 
     plt.close("all")
 
-def generate_portfolio(df, ticker):
+def generate_portfolio(df):
     spy_curve = load_spy()
 
     os.makedirs(f'results/portfolio', exist_ok = True)
 
     equity_curve = plot.plot_equity_curve(df, 'Portfolio', spy_curve)
-    equity_curve.savefig('results/assets/portfolio/equity_curve.png')
+    equity_curve.savefig('results/portfolio/equity_curve.png')
 
     plt.close("all")
 
@@ -93,7 +106,7 @@ def analyze_ticker(df, ticker):
     calculate_metrics(df, ticker)
 
 def analyze_portfolio(df):
-    generate_portfolio()
+    generate_portfolio(df)
     calculate_portfolio(df)
    
 def load_spy():

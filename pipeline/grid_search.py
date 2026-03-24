@@ -1,4 +1,7 @@
-import run
+from pipeline import portfolio
+from evaluation import metrics
+from itertools import product
+import pandas as pd
 import yaml
 
 with open('config.yml', 'r') as file:
@@ -8,13 +11,19 @@ ALT_GAMMAS = config['alt_gammas']
 ALT_ENTROPY_MODES = config['alt_entropy_modes']
 ALT_ENTROPY_WINDOWS = config['alt_entropy_windows']
 
-def run_grid_search(tickers, gamma, entropy_mode, entropy_window):
-    config['entropy_confidence'] = gamma
-    config['rolling_window'] = entropy_window
-    config['entropy_mode'] = entropy_mode
+def set_parameters(tickers, gamma, mode, window):
+    results = portfolio.aggregate_results(tickers, gamma = gamma, mode = mode, window = window)
+    portfolio_df = portfolio.build_portfolio(tickers, results, mode = mode)
 
-    results = {}
-    for ticker in tickers:
-        results[ticker] = run.run_pipeline(ticker)
-    
+    return portfolio_df
+
+def iterate_pairs(tickers, gammas = ALT_GAMMAS, modes = ALT_ENTROPY_MODES, windows = ALT_ENTROPY_WINDOWS):
+    results = pd.DataFrame()
+
+    for gamma, mode, window in product(gammas, modes, windows):
+        portfolio = set_parameters(tickers, gamma, mode, window)
+        sharpe = metrics.calculate_sharpe(portfolio['Blend Return'])
+        results.loc[len(results)] = {'gamma': gamma, 'mode': mode, 'window': window, 'sharpe': sharpe}
+        print(f'gamma: {gamma} mode: {mode} window: {window} sharpe: {sharpe}')
+
     return results

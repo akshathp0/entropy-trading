@@ -46,10 +46,10 @@ def build_expanding_entropy(df, start = EXPANDING_WINDOW_MINIMUM, count_min = ST
 
     return df
 
-def build_rolling_entropy(df, start = EXPANDING_WINDOW_MINIMUM, count_min = STATE_COUNT_MINIMUM, window = ROLLING_WINDOW):
+def build_rolling_entropy(df, count_min = STATE_COUNT_MINIMUM, window = ROLLING_WINDOW):
     rolling = [np.nan] * len(df)
 
-    for i in range(start, len(df)):
+    for i in range(window, len(df)):
         window_df = df.iloc[max(0, i - window):i]
         transition_matrix, counts = matrix.matrix_template(window_df)
 

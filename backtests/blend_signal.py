@@ -8,7 +8,7 @@ ENTROPY_MODE = config['entropy_mode']
 def generate_signal(df, mode = ENTROPY_MODE):
     target_vol = df['Volatility'].expanding().mean()
     
-    if mode == 'signal_only' or 'both':
+    if mode == 'signal_only' or mode == 'both':
         df['Blend Signal'] = (df['Confidence'] * df['MR Signal'] * (target_vol / df['Volatility'])).clip(0, 1)
     else:
         df['Blend Signal'] = (df['MR Signal'] * (target_vol / df['Volatility'])).clip(0, 1)
