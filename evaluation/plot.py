@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
+import numpy as np
 from evaluation import metrics
 import yaml
 
@@ -74,4 +75,18 @@ def plot_rolling_sharpe(df, ticker, spy_curve, window = ROLLING_SHARPE_WINDOW):
     ax.set_title(f'{ticker} Rolling Sharpe (252 Days) vs. SPY')
     plt.tight_layout()
 
+    return fig
+
+def plot_monte_carlo(portfolio, spy):
+    fig, ax = plt.subplots(figsize = (10, 5))
+
+    colors = ['Strategy Wins' if p > spy else 'SPY Wins' for p, spy in zip(portfolio, spy)]
+    sns.scatterplot(x = spy, y = portfolio, hue = colors)
+    
+    ax.axline((0, 0), slope = 1, color = 'k', ls = '--', lw = 2)
+    ax.set_xlabel('SPY Return')
+    ax.set_ylabel('Strategy Return')
+    ax.set_title('Monte Carlo Simulation Vs SPY (1000 Simulations)')
+
+    plt.tight_layout()
     return fig

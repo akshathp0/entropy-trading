@@ -40,3 +40,7 @@ def build_portfolio(tickers, results, mode = ENTROPY_MODE):
     portfolio_df['Blend Equity Curve'] = (1 + portfolio_df['Blend Return']).cumprod()
 
     return portfolio_df
+
+def average_exposure(tickers, results):
+    signals = pd.DataFrame({ticker: results[ticker]['Blend Signal'] for ticker in tickers})
+    return signals.mean().mean()
