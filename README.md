@@ -1,6 +1,7 @@
 # Regime-Aware Mean Reversion Portfolio
  
 **Author:** Akshath Pasam
+
 **Stack:** Python (NumPy, Pandas) — no external quant libraries
  
 ---
@@ -159,4 +160,4 @@ Pipeline is run through Jupyter notebooks in `notebooks/`.
 ## Contact
  
 **Akshath Pasam**
-[akshath@pasam.com] · [GitHub](https://github.com/akshathpasam)
+[akshath@pasam.com] · [GitHub](https://github.com/akshathp0)
