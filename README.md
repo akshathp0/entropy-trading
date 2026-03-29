@@ -2,7 +2,7 @@
  
 **Author:** Akshath Pasam
 
-**Stack:** Python (NumPy, Pandas) — no external quant libraries
+**Stack:** Python (NumPy, Pandas) (no external quant libraries)
  
 ---
  
@@ -56,12 +56,6 @@ sized_signal = mr_signal × (target_vol / current_vol)
 ```
  
 This position scaling reduces exposure during high-volatility markets and increases it during calm markets, which becomes the primary mechanism behind the strategy's drawdown reduction.
- 
-### 5. Portfolio Construction
- 
-Assets are dynamically sized through their individual entropy values. Daily portfolio return is the aggregate of individual asset strategy returns, compounded to produce the portfolio equity curve.
- 
----
  
 ## Results
  
