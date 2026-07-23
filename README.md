@@ -10,7 +10,7 @@
  
 This strategy is a long-only risk-adjusted portfolio that combines **time-series mean reversion**, **Markov chain regime detection**, and **volatility-based position sizing** to dynamically adjust exposure based on market conditions.
  
-The core finding: the strategy achieves **less than half the drawdown of SPY** (-15.6% vs -33.7%) from 2018 to 2026 by automatically reducing exposure during tenuous market conditions. During the 2008 financial crisis, average portfolio exposure dropped from 63% to 33%, and during COVID, it dropped from 63% to 51%. Volatility-based sizing and signal generation across various regimes drives this dynamic risk adjustment.
+The core finding: out-of-sample (2018-2025), the strategy achieves **less than half the drawdown of SPY** (-15.6% vs -33.7%), but underperforms on returns (4.3% vs 11.1%) and Sharpe (0.63 vs 0.77) in a bull-dominated period. During the 2008 financial crisis (in-sample), average portfolio exposure dropped from 63% to 33%, and during the 2020 COVID crash (out-of-sample), it dropped from 63% to 51%. Volatility-based sizing and signal generation across various regimes drives this dynamic risk adjustment. The strategy functions more as risk management than a source of alpha.
  
 Shannon entropy was tested as both a signal modifier and portfolio allocation mechanism in order to act as a third risk-adjustor during regime shifts. It had a minimal performance impact (~0.01 Sharpe improvement), indicating that the mean reversion signal and volatility sizing are the main features managing risk.
  
@@ -132,7 +132,7 @@ Entropy-weighted portfolio allocation was tested against equal-weight allocation
 **Requirements:** Python 3.12+, NumPy, Pandas, Matplotlib, Seaborn, Scikit-learn, PyYAML
  
 ```bash
-git clone https://github.com/akshathpasam/entropy-trading.git
+git clone https://github.com/akshathp0/entropy-trading.git
 cd entropy-trading
 conda env create -f environment.yml
 ```
