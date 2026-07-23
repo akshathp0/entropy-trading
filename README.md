@@ -134,7 +134,7 @@ Entropy-weighted portfolio allocation was tested against equal-weight allocation
 ```bash
 git clone https://github.com/akshathpasam/entropy-trading.git
 cd entropy-trading
-pip install -r requirements.txt
+conda env create -f environment.yml
 ```
  
 Pipeline is run through Jupyter notebooks in `notebooks/`.
