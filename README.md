@@ -76,6 +76,12 @@ This position scaling reduces exposure during high-volatility markets and increa
 | Sortino Ratio      | 0.751      | 0.944         |
 | Calmar Ratio       | 0.275      | 0.328         |
 | **Max Drawdown**   | **-15.58%**| **-33.72%**   |
+
+### Figures
+
+<img src="results/out_of_sample_portfolio/equity_curve.png" width="700">
+
+<em>Out-of-sample equity curves (2018–2025), normalized to 1.0. SPY compounds substantially higher, while the strategy's drawdowns are materially shallower — the strategy trades return for drawdown reduction rather than generating alpha.</em>
  
 ### Dynamic Exposure Analysis
  
